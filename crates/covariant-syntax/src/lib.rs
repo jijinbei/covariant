@@ -1,5 +1,6 @@
 //! Lexer, parser, and AST definitions for the COVARIANT language.
 
+pub mod ast;
 pub mod error;
 pub mod lexer;
 pub mod span;
