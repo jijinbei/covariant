@@ -1,6 +1,6 @@
 # COVARIANT Implementation Roadmap
 
-**Status**: Planning Phase
+**Status**: Implementation Phase
 **Target**: v0.1 Proof of Concept
 **Timeline**: 6-8 weeks
 
@@ -24,54 +24,57 @@
 ### Next Steps
 - [ ] Complete IR node specification
 - [ ] Define thread database schema
-- [ ] Create workspace structure
+- [x] Create workspace structure
 
 **Deliverables**:
 - ✅ Complete specification document
 - ✅ Project infrastructure design
+- ✅ Workspace structure (`covariant-syntax`, `covariant-cli`)
 - ⏳ IR node reference
 
 ---
 
-## Phase 1: Syntax Crate
+## Phase 1: Syntax Crate ✅
 
 **Goal**: Working lexer and parser
 **Duration**: 1 week
 
 ### 1.1 Foundation
-- [ ] Create `crates/covariant-syntax`
-- [ ] Define token types (`token.rs`)
-- [ ] Define span types (`span.rs`)
-- [ ] Define error types (`error.rs`)
+- [x] Create `crates/covariant-syntax`
+- [x] Define token types (`token.rs`)
+- [x] Define span types (`span.rs`)
+- [x] Define error types (`error.rs`)
 
 ### 1.2 Lexer
-- [ ] Implement lexer (`lexer.rs`)
-- [ ] Keyword recognition
-- [ ] Number + unit parsing (10mm, 45deg)
-- [ ] String literals
-- [ ] Comment handling
-- [ ] Error recovery
+- [x] Implement lexer (`lexer.rs`)
+- [x] Keyword recognition
+- [x] Number + unit parsing (10mm, 45deg)
+- [x] String literals
+- [x] Comment handling (line + nested block)
+- [x] Error recovery
 
 ### 1.3 Parser
-- [ ] Define AST (`ast.rs`)
-- [ ] Expression parser (`parser.rs`)
-- [ ] Function calls
-- [ ] Let bindings
-- [ ] Type annotations
-- [ ] Error recovery
-- [ ] Span preservation
+- [x] Define AST (`ast.rs`)
+- [x] Expression parser (`parser.rs`) — Pratt precedence climbing
+- [x] Function calls (positional + named args)
+- [x] Let bindings
+- [x] Type annotations
+- [x] Error recovery
+- [x] Span preservation
+- [x] Data constructors, with-update, lambda, if/match, list, block expressions
 
 ### 1.4 Tests
-- [ ] Lexer tests
-- [ ] Parser tests
-- [ ] Error message tests
-- [ ] Golden file tests
+- [x] Lexer unit tests (26 cases)
+- [x] Parser unit tests (35 cases)
+- [x] Integration tests with `.cov` fixture files (5 cases)
+- [x] Test specification document (`docs/TESTING.md`)
 
 **Deliverables**:
-- Complete lexer
-- Complete parser
-- Source position tracking
-- Clear error messages
+- ✅ Complete hand-written lexer (zero-copy, unit suffixes, nested block comments)
+- ✅ Complete recursive descent parser (Pratt precedence climbing)
+- ✅ Source position tracking (`Span`, `Spanned<T>`)
+- ✅ 71 tests passing (66 unit + 5 integration)
+- ✅ 4 example `.cov` fixture files
 
 ---
 
@@ -322,7 +325,7 @@
 **Duration**: 2-3 days
 
 ### 8.1 CLI Interface
-- [ ] Create `crates/covariant-cli`
+- [x] Create `crates/covariant-cli` (skeleton)
 - [ ] Argument parsing with clap
 - [ ] File loading
 - [ ] Error formatting for terminal
@@ -352,7 +355,7 @@
 
 **Minimum Viable Product**:
 - [x] Complete specification
-- [ ] Working parser
+- [x] Working parser
 - [ ] Type checker
 - [ ] Basic primitives (box, cylinder, sphere)
 - [ ] Boolean operations (union, difference, intersection)
@@ -442,7 +445,7 @@
 - **bevy** (0.12.x): Full game engine (overkill?)
 
 ### Optional
-- **logos** (0.13.x): Fast lexer generator
+- ~~**logos** (0.13.x): Fast lexer generator~~ (not needed — hand-written lexer implemented)
 - **codespan-reporting** (0.11.x): Beautiful error diagnostics
 - **rustyline** (13.x): REPL with history
 - **insta** (1.x): Snapshot testing
@@ -462,6 +465,6 @@
 
 ---
 
-**Last Updated**: 2026-01-30
-**Status**: Phase 0 complete, ready to begin Phase 1
-**Next Action**: Create workspace structure and begin `covariant-syntax`
+**Last Updated**: 2026-02-05
+**Status**: Phase 0 + Phase 1 complete, ready to begin Phase 2
+**Next Action**: Create `covariant-thread` crate and begin thread standards database
