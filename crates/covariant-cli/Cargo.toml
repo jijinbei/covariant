@@ -1,0 +1,13 @@
+[package]
+name = "covariant-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Command-line interface for the COVARIANT language"
+
+[[bin]]
+name = "covariant"
+path = "src/main.rs"
+
+[dependencies]
+covariant-syntax = { path = "../covariant-syntax" }

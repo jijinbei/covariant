@@ -3,5 +3,12 @@
 version = 4
 
 [[package]]
-name = "covariant"
+name = "covariant-cli"
+version = "0.1.0"
+dependencies = [
+ "covariant-syntax",
+]
+
+[[package]]
+name = "covariant-syntax"
 version = "0.1.0"
