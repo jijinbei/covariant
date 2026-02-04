@@ -196,7 +196,5 @@ Areas of interest:
 
 Inspired by:
 - **OpenSCAD**: Pioneering code-based CAD
-- **CadQuery/Build123d**: Python-based parametric CAD
 - **Haskell**: Functional programming principles
 - **ImplicitCAD**: Mathematics-first CAD
-- **SolidPython**: Parametric design as code
