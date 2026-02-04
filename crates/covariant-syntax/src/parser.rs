@@ -1063,8 +1063,8 @@ mod tests {
 
     #[test]
     fn float_literal() {
-        let expr = parse_expr_str("3.14");
-        assert!(matches!(expr.node, Expr::FloatLit(v) if (v - 3.14).abs() < f64::EPSILON));
+        let expr = parse_expr_str("1.23");
+        assert!(matches!(expr.node, Expr::FloatLit(v) if (v - 1.23).abs() < f64::EPSILON));
     }
 
     #[test]

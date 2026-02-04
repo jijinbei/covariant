@@ -1,0 +1,28 @@
+// Function definitions, pipe operator, and lambdas
+
+fn double(x: Int) -> Int {
+  x * 2
+}
+
+fn add(a: Int, b: Int) -> Int {
+  a + b
+}
+
+fn make_plate(width: Length, height: Length, thickness: Length) -> Solid {
+  box(vec3(width, height, thickness))
+}
+
+// Pipe operator
+let result = make_plate(60mm, 120mm, 5mm)
+  |> add_holes(mounting_pattern)
+  |> fillet(edges, 2mm)
+
+// Lambda expressions
+let positions = map(|i| vec3(i * 10mm, 0mm, 0mm), [1, 2, 3, 4])
+
+let transform = |s| s
+  |> move(vec3(10mm, 0mm, 0mm))
+  |> rotate(vec3(0, 0, 1), 45deg)
+
+// Higher-order usage
+let holes = map(|pos| move(hole, pos), positions)

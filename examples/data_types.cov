@@ -1,0 +1,42 @@
+// Data type definitions, with-update, and field access
+
+data Rectangle {
+  width: Length,
+  height: Length
+}
+
+data RectangleWithDefaults {
+  width: Length = 10mm,
+  height: Length = 10mm
+}
+
+enum ThreadStandard {
+  ISO,
+  UTS,
+  BSW
+}
+
+// Constructor
+let plate = Rectangle { width = 60mm, height = 120mm }
+
+// Field access
+let w = plate.width
+let h = plate.height
+
+// With-update (immutable update)
+let plate2 = plate with { height = 200mm }
+
+// Nested data
+data MountingPlate {
+  rect: Rectangle,
+  thickness: Length,
+  hole_count: Int
+}
+
+let mp = MountingPlate {
+  rect = Rectangle { width = 80mm, height = 50mm },
+  thickness = 5mm,
+  hole_count = 4
+}
+
+let plate_solid = box(vec3(mp.rect.width, mp.rect.height, mp.thickness))

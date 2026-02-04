@@ -1,0 +1,20 @@
+// Mounting plate with threaded holes — from SPEC.md
+
+let plate = box(vec3(80mm, 50mm, 5mm))
+
+let hole = threaded_hole(
+  ISO_METRIC, M3, TAP,
+  depth = 8mm,
+  chamfer = 0.5mm
+)
+
+let holes = union_many([
+  move(hole, vec3(10mm, 10mm, 0)),
+  move(hole, vec3(70mm, 10mm, 0)),
+  move(hole, vec3(70mm, 40mm, 0)),
+  move(hole, vec3(10mm, 40mm, 0))
+])
+
+let model = difference(plate, holes)
+
+export_stl("mounting_plate.stl", model)

@@ -1,0 +1,38 @@
+// Numeric operations, unit literals, and vector construction
+
+// Length literals with various units
+let a = 10mm
+let b = 5cm
+let c = 2.5in
+let d = 1m
+
+// Angle literals
+let angle1 = 45deg
+let angle2 = 0.5rad
+
+// Arithmetic
+let sum = 10mm + 5mm
+let product = 2 * 3.14
+let ratio = 100mm / 2
+
+// Vector construction
+let v2 = vec2(10mm, 20mm)
+let v3 = vec3(80mm, 50mm, 5mm)
+let origin = vec3(0, 0, 0)
+
+// Boolean and comparison
+let flag = true
+let check = 10 > 5
+let eq = a == 10mm
+let combined = flag && check || !eq
+
+// Geometric primitives with math
+let radius = 10mm
+let height = 20mm
+let cyl = cylinder(radius, height)
+let sph = sphere(radius * 2)
+
+// Trigonometric
+let x = radius * cos(angle1)
+let y = radius * sin(angle1)
+let point = vec3(x, y, 0mm)
