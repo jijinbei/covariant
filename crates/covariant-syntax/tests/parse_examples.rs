@@ -5,7 +5,8 @@ use covariant_syntax::ast::Stmt;
 
 /// Parse a .cov file and assert zero errors.
 fn parse_file(path: &Path) -> covariant_syntax::SourceFile {
-    let source = fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {}: {e}", path.display()));
+    let source = fs::read_to_string(path)
+        .unwrap_or_else(|e| panic!("failed to read {}: {e}", path.display()));
     let (ast, errors) = covariant_syntax::parse(&source);
     assert!(
         errors.is_empty(),
@@ -33,7 +34,11 @@ fn examples_dir() -> std::path::PathBuf {
 fn parse_mounting_plate() {
     let ast = parse_file(&examples_dir().join("mounting_plate.cov"));
     // 4 let bindings + 1 expression statement
-    assert_eq!(ast.stmts.len(), 5, "expected 5 statements in mounting_plate.cov");
+    assert_eq!(
+        ast.stmts.len(),
+        5,
+        "expected 5 statements in mounting_plate.cov"
+    );
 
     // First 4 should be Let statements
     for (i, stmt) in ast.stmts.iter().take(4).enumerate() {
@@ -66,7 +71,10 @@ fn parse_functions() {
         .iter()
         .filter(|s| matches!(s.node, Stmt::FnDef(_)))
         .count();
-    assert!(fn_count >= 3, "expected at least 3 fn definitions, got {fn_count}");
+    assert!(
+        fn_count >= 3,
+        "expected at least 3 fn definitions, got {fn_count}"
+    );
 }
 
 #[test]
@@ -88,8 +96,14 @@ fn parse_data_types() {
         .iter()
         .filter(|s| matches!(s.node, Stmt::EnumDef(_)))
         .count();
-    assert!(data_count >= 2, "expected at least 2 data definitions, got {data_count}");
-    assert!(enum_count >= 1, "expected at least 1 enum definition, got {enum_count}");
+    assert!(
+        data_count >= 2,
+        "expected at least 2 data definitions, got {data_count}"
+    );
+    assert!(
+        enum_count >= 1,
+        "expected at least 1 enum definition, got {enum_count}"
+    );
 }
 
 #[test]
@@ -107,7 +121,11 @@ fn parse_math() {
         .iter()
         .filter(|s| matches!(s.node, Stmt::Let(_)))
         .count();
-    assert_eq!(let_count, ast.stmts.len(), "all math.cov statements should be let bindings");
+    assert_eq!(
+        let_count,
+        ast.stmts.len(),
+        "all math.cov statements should be let bindings"
+    );
 }
 
 #[test]
@@ -116,11 +134,7 @@ fn all_examples_parse_without_errors() {
     let entries: Vec<_> = fs::read_dir(&dir)
         .unwrap_or_else(|e| panic!("failed to read examples dir {}: {e}", dir.display()))
         .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.path()
-                .extension()
-                .is_some_and(|ext| ext == "cov")
-        })
+        .filter(|e| e.path().extension().is_some_and(|ext| ext == "cov"))
         .collect();
 
     assert!(

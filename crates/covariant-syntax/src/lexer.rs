@@ -218,8 +218,8 @@ impl<'src> Lexer<'src> {
         }
 
         // Check for decimal point (not followed by '.' for range or non-digit)
-        let is_float = self.peek() == Some(b'.')
-            && self.peek_next().is_some_and(|c| c.is_ascii_digit());
+        let is_float =
+            self.peek() == Some(b'.') && self.peek_next().is_some_and(|c| c.is_ascii_digit());
 
         if is_float {
             self.advance(); // consume '.'
