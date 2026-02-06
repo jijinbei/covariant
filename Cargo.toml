@@ -2,6 +2,7 @@
 members = [
     "crates/covariant-cli",
     "crates/covariant-syntax",
+    "crates/covariant-thread",
 ]
 resolver = "2"
 

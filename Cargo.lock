@@ -12,3 +12,7 @@ dependencies = [
 [[package]]
 name = "covariant-syntax"
 version = "0.1.0"
+
+[[package]]
+name = "covariant-thread"
+version = "0.1.0"
