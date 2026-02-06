@@ -7,6 +7,7 @@ pub mod dimensions;
 pub mod iso_metric;
 pub mod spec;
 pub mod standard;
+pub mod uts;
 
 pub use dimensions::ThreadDimensions;
 pub use spec::{ThreadMode, ThreadSpec};
