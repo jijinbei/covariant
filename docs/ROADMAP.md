@@ -78,43 +78,45 @@
 
 ---
 
-## Phase 2: Thread Crate
+## Phase 2: Thread Crate ✅
 
 **Goal**: Thread standards database
 **Duration**: 3-4 days
 
 ### 2.1 Data Structures
-- [ ] Create `crates/covariant-thread`
-- [ ] Define ThreadSpec type
-- [ ] Define ThreadStandard enum
-- [ ] Define ThreadSize enum
-- [ ] Define ThreadKind enum
+- [x] Create `crates/covariant-thread`
+- [x] Define ThreadSpec type
+- [x] Define ThreadStandard enum
+- [x] Define ThreadSize enum (15 ISO + 13 UTS)
+- [x] Define ThreadKind enum
+- [x] Define ClearanceFit enum
 
 ### 2.2 Standards Data
-- [ ] ISO Metric data (M1-M100)
-  - [ ] Define JSON schema
-  - [ ] Enter M3, M4, M5 data
-  - [ ] Enter all sizes data
-- [ ] UTS data (#0-4")
-- [ ] BSW data (future)
+- [x] ISO Metric data (M1.6–M30, 15 sizes)
+  - [x] Embedded Rust data via match arms (no JSON/serde)
+  - [x] M3, M4, M5 initial data
+  - [x] All 15 sizes complete
+- [x] UTS data (#2-56 through 3/4"-10, 13 sizes, all in mm)
+- [ ] BSW data (future — enum variant exists, lookup panics)
 
 ### 2.3 Dimension Calculations
-- [ ] Tap hole diameter calculation
-- [ ] Clearance hole diameter calculation
-- [ ] Insert hole diameter calculation
-- [ ] Chamfer dimensions
-- [ ] Unit tests for all calculations
+- [x] Tap hole diameter calculation
+- [x] Clearance hole diameter calculation (close/medium/free)
+- [x] Insert hole diameter calculation
+- [x] Chamfer dimensions (45-degree)
+- [x] Unit tests for all calculations
 
 ### 2.4 Geometry Generation
-- [ ] Simple representation (cylinder)
-- [ ] Cosmetic representation (annotations)
-- [ ] Full thread geometry (helix)
+- [x] Simple representation (CylinderParams)
+- [x] Cosmetic representation (CosmeticAnnotation)
+- [x] Full thread geometry (HelixParams)
 
 **Deliverables**:
-- Thread standards database
-- Dimension calculation API
-- Geometry generation API
-- Data files: `data/threads/iso_metric.json`, `data/threads/uts.json`
+- ✅ Thread standards database (embedded Rust, zero deps)
+- ✅ Dimension calculation API (`get_dimensions`, `hole_diameter`, `clearance_hole_diameter`, `chamfer_dimensions`)
+- ✅ Geometry generation API (`generate_thread_geometry` → `ThreadGeometry`)
+- ✅ 48 unit tests + 8 integration tests passing
+- ✅ `string_enum!` macro for Display/FromStr/ALL boilerplate
 
 ---
 
@@ -465,6 +467,6 @@
 
 ---
 
-**Last Updated**: 2026-02-05
-**Status**: Phase 0 + Phase 1 complete, ready to begin Phase 2
-**Next Action**: Create `covariant-thread` crate and begin thread standards database
+**Last Updated**: 2026-02-07
+**Status**: Phase 0 + Phase 1 + Phase 2 complete, ready to begin Phase 3
+**Next Action**: Create `covariant-ir` crate and begin IR definition
