@@ -4,6 +4,7 @@
 //! hole diameter calculations, and geometry parameters for thread generation.
 
 pub mod dimensions;
+pub mod iso_metric;
 pub mod spec;
 pub mod standard;
 
