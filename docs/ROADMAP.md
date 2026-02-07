@@ -327,35 +327,34 @@
 
 ---
 
-## Phase 8: CLI Crate
+## Phase 8: CLI Crate ✅
 
 **Goal**: Usable command-line tool
 **Duration**: 2-3 days
 
 ### 8.1 CLI Interface
 - [x] Create `crates/covariant-cli` (skeleton)
-- [ ] Argument parsing with clap
-- [ ] File loading
-- [ ] Error formatting for terminal
-- [ ] Progress indication
-- [ ] Colored output
+- [x] Argument parsing with clap
+- [x] File loading
+- [x] Error formatting for terminal (syntax, IR, and eval errors with source locations)
+- [ ] Progress indication (deferred)
+- [ ] Colored output (deferred)
 
 ### 8.2 Commands
-- [ ] `covariant compile <file.cov>`
-- [ ] `covariant export <file.cov> -o output.stl`
-- [ ] `covariant debug <file.cov>`
-- [ ] `covariant check <file.cov>` (type check only)
+- [x] `covariant run <file.cov>` — parse, lower, evaluate (produces geometry + STL)
+- [x] `covariant check <file.cov>` — parse and lower only (no evaluation)
+- [ ] `covariant debug <file.cov>` (deferred to Phase 7)
 
 ### 8.3 REPL (Optional)
-- [ ] Interactive mode
-- [ ] Live preview
-- [ ] Command history
-- [ ] Tab completion
+- [ ] Interactive mode (deferred)
+- [ ] Live preview (deferred)
+- [ ] Command history (deferred)
+- [ ] Tab completion (deferred)
 
 **Deliverables**:
-- Functional CLI tool
-- All planned commands working
-- User-friendly error messages
+- ✅ Functional CLI with `run` and `check` commands
+- ✅ Error formatting with source locations (line:col)
+- ✅ End-to-end: `covariant run mounting_plate.cov` → produces STL file
 
 ---
 
@@ -474,5 +473,5 @@
 ---
 
 **Last Updated**: 2026-02-07
-**Status**: Phases 0–5 complete, ready to begin Phase 6
-**Next Action**: Create `covariant-export` crate or proceed to CLI integration
+**Status**: Phases 0–5, 8 complete (core pipeline + CLI working)
+**Next Action**: Phase 6 (export quality control) or Phase 7 (debug visualization)

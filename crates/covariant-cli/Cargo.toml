@@ -11,3 +11,7 @@ path = "src/main.rs"
 
 [dependencies]
 covariant-syntax = { path = "../covariant-syntax" }
+covariant-ir = { path = "../covariant-ir" }
+covariant-eval = { path = "../covariant-eval" }
+covariant-geom = { path = "../covariant-geom" }
+clap = { version = "4", features = ["derive"] }
