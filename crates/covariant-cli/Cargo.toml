@@ -14,4 +14,5 @@ covariant-syntax = { path = "../covariant-syntax" }
 covariant-ir = { path = "../covariant-ir" }
 covariant-eval = { path = "../covariant-eval" }
 covariant-geom = { path = "../covariant-geom" }
+covariant-debug = { path = "../covariant-debug" }
 clap = { version = "4", features = ["derive"] }

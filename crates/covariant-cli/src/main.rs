@@ -23,6 +23,11 @@ enum Command {
         /// Path to the .cov source file.
         file: PathBuf,
     },
+    /// Debug a .cov file with step-by-step 3D visualization.
+    Debug {
+        /// Path to the .cov source file.
+        file: PathBuf,
+    },
 }
 
 fn main() {
@@ -31,6 +36,7 @@ fn main() {
     let result = match cli.command {
         Command::Run { ref file } => run(file),
         Command::Check { ref file } => check(file),
+        Command::Debug { ref file } => debug(file),
     };
 
     if let Err(msg) = result {
@@ -55,6 +61,31 @@ fn check(path: &Path) -> Result<(), String> {
     let source = read_source(path)?;
     let _ = parse_and_lower(&source, path)?;
     eprintln!("ok: {}", path.display());
+    Ok(())
+}
+
+/// Read source, parse, lower, evaluate with debug step collection, then launch viewer.
+fn debug(path: &Path) -> Result<(), String> {
+    let source = read_source(path)?;
+    let dag = parse_and_lower(&source, path)?;
+
+    let kernel = covariant_geom::TruckKernel;
+    let file_path = path.display().to_string();
+    let session =
+        covariant_debug::eval_debug(&dag, &kernel, source.clone(), file_path)
+            .map_err(|e| format_eval_error(&e, &source, path))?;
+
+    eprintln!(
+        "Debug session: {} geometry step(s) collected from {}",
+        session.step_count(),
+        path.display(),
+    );
+    for step in &session.steps {
+        let label = step.label.as_deref().unwrap_or("(unlabeled)");
+        eprintln!("  Step {}: {}", step.index + 1, label);
+    }
+
+    covariant_debug::launch_viewer(&session, &kernel);
     Ok(())
 }
 
