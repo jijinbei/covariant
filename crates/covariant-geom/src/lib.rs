@@ -5,6 +5,7 @@
 
 pub mod error;
 pub mod kernel;
+pub mod primitives;
 pub mod truck_kernel;
 pub mod types;
 

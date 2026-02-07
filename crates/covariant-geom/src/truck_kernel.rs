@@ -9,16 +9,16 @@ use std::path::Path;
 pub struct TruckKernel;
 
 impl GeomKernel for TruckKernel {
-    fn box_solid(&self, _size_x: f64, _size_y: f64, _size_z: f64) -> Solid {
-        todo!("TruckKernel::box_solid")
+    fn box_solid(&self, size_x: f64, size_y: f64, size_z: f64) -> Solid {
+        Solid::from_truck(crate::primitives::make_box(size_x, size_y, size_z))
     }
 
-    fn cylinder(&self, _radius: f64, _height: f64) -> Solid {
-        todo!("TruckKernel::cylinder")
+    fn cylinder(&self, radius: f64, height: f64) -> Solid {
+        Solid::from_truck(crate::primitives::make_cylinder(radius, height))
     }
 
-    fn sphere(&self, _radius: f64) -> Solid {
-        todo!("TruckKernel::sphere")
+    fn sphere(&self, radius: f64) -> Solid {
+        Solid::from_truck(crate::primitives::make_sphere(radius))
     }
 
     fn union(&self, _a: &Solid, _b: &Solid) -> GeomResult<Solid> {
