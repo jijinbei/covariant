@@ -601,11 +601,7 @@ mod tests {
         register_builtins(&mut env);
         let dag = Dag::new();
         let kernel = TruckKernel;
-        let mut ctx = EvalCtx {
-            dag: &dag,
-            env: Env::new(),
-            kernel: &kernel,
-        };
+        let mut ctx = EvalCtx::new(&dag, Env::new(), &kernel);
 
         let func = env.lookup("vec3").unwrap().clone();
         if let Value::BuiltinFn { func, .. } = func {
