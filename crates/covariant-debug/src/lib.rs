@@ -5,6 +5,8 @@
 
 pub mod stepper;
 pub mod trace;
+pub mod viewer;
 
 pub use stepper::eval_debug;
 pub use trace::{DebugSession, DebugStep};
+pub use viewer::launch_viewer;

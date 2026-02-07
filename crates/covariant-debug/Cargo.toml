@@ -10,3 +10,5 @@ covariant-syntax = { path = "../covariant-syntax" }
 covariant-ir = { path = "../covariant-ir" }
 covariant-eval = { path = "../covariant-eval" }
 covariant-geom = { path = "../covariant-geom" }
+kiss3d = "0.35"
+nalgebra = "0.30"
