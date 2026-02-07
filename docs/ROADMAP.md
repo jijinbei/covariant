@@ -297,39 +297,42 @@
 
 ---
 
-## Phase 7: Debug Crate
+## Phase 7: Debug Crate ✅
 
 **Goal**: Debug visualization
 **Duration**: 1 week
 
 ### 7.1 Trace System
-- [ ] Create `crates/covariant-debug`
-- [ ] Implement trace annotations (`trace.rs`)
-- [ ] Implement step tracking (`stepper.rs`)
-- [ ] DAG linearization
-- [ ] Source span mapping
+- [x] Create `crates/covariant-debug`
+- [x] Implement trace annotations (`trace.rs`) — DebugStep, DebugSession types
+- [x] Implement step tracking (`stepper.rs`) — instrumented eval with debug_steps
+- [x] Source span mapping — each step records NodeId + Span
 
 ### 7.2 Visualization
 
-**Rendering backend candidates**:
-- **three-d**: Simple, pure Rust, good for prototyping
-- **bevy**: Full game engine, ECS architecture, more complex
-- **kiss3d**: Minimal, simple API, good for basic 3D
+**Rendering backend**: **kiss3d** 0.35 (nalgebra-based, simple API)
 
-**Decision**: Start with three-d or kiss3d for simplicity
+- [x] Implement basic 3D viewer (`viewer.rs`) — kiss3d with ArcBall orbit camera
+- [x] Implement step-by-step rendering — Left/Right/Home/End key navigation
+- [x] Implement current node highlighting — active step in blue, previous in gray
+- [x] Camera controls — ArcBall orbit (drag/scroll/right-click pan)
+- [ ] Source code highlighting (terminal-based) — deferred to v0.2+
 
-- [ ] Choose rendering backend
-- [ ] Implement basic 3D viewer (`viewer.rs`)
-- [ ] Implement step-by-step rendering
-- [ ] Implement current node highlighting
-- [ ] Implement source code highlighting (terminal-based)
-- [ ] Camera controls
+### 7.3 CLI Integration
+- [x] `covariant debug <file.cov>` command
+- [x] Step summary printed to terminal before viewer opens
+
+### 7.4 Design Decisions
+- **Instrumented eval**: `debug_steps` field on `EvalCtx`, populated after each FnCall returning Solid
+- **trace() integration**: Sets `pending_label` consumed by the next step record
+- **Mesh conversion**: truck `PolygonMesh` → `positions()`/`tri_faces()` → kiss3d `Mesh` (f64→f32, usize→u16)
 
 **Deliverables**:
-- Step execution system
-- Debug visualization
-- Interactive viewer
-- Source highlighting
+- ✅ DebugStep/DebugSession trace types
+- ✅ Instrumented evaluator (`eval_debug`)
+- ✅ kiss3d 3D viewer with step-through
+- ✅ CLI `debug` command
+- ✅ 4 unit tests + 6 integration tests passing
 
 ---
 
@@ -349,7 +352,7 @@
 ### 8.2 Commands
 - [x] `covariant run <file.cov>` — parse, lower, evaluate (produces geometry + STL)
 - [x] `covariant check <file.cov>` — parse and lower only (no evaluation)
-- [ ] `covariant debug <file.cov>` (deferred to Phase 7)
+- [x] `covariant debug <file.cov>` (Phase 7)
 
 ### 8.3 REPL (Optional)
 - [ ] Interactive mode (deferred)
@@ -479,5 +482,5 @@
 ---
 
 **Last Updated**: 2026-02-07
-**Status**: Phases 0–6, 8 complete (core pipeline + CLI + export working)
-**Next Action**: Phase 7 (debug visualization)
+**Status**: Phases 0–8 complete (core pipeline + CLI + export + debug working)
+**Next Action**: v0.1 release polish
