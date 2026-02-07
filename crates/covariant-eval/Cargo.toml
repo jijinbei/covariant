@@ -9,4 +9,5 @@ description = "Evaluator for the COVARIANT language"
 covariant-syntax = { path = "../covariant-syntax" }
 covariant-ir = { path = "../covariant-ir" }
 covariant-geom = { path = "../covariant-geom" }
+covariant-export = { path = "../covariant-export" }
 covariant-thread = { path = "../covariant-thread" }

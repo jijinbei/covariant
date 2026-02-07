@@ -436,18 +436,16 @@ fn register_utility(env: &mut Env) {
             check_arity("export_stl", args, 2)?;
             let path = expect_string(&args[0], "path")?;
             let solid = expect_solid(&args[1], "solid")?;
-            let mesh = ctx
-                .kernel
-                .tessellate(&solid, covariant_geom::DEFAULT_TOLERANCE);
-            ctx.kernel
-                .export_stl(&mesh, Path::new(&path))
-                .map_err(|e| {
+            let opts = covariant_export::ExportOptions::default();
+            covariant_export::export_stl(ctx.kernel, &solid, Path::new(&path), &opts).map_err(
+                |e| {
                     EvalError::new(
                         EvalErrorKind::GeomError,
                         format!("export_stl failed: {e}"),
                         None,
                     )
-                })?;
+                },
+            )?;
             Ok(Value::Unit)
         }),
     );
