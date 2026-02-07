@@ -56,3 +56,78 @@ impl Default for Env {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn define_and_lookup() {
+        let mut env = Env::new();
+        env.define("x", Value::Int(42));
+        let val = env.lookup("x").unwrap();
+        assert!(matches!(val, Value::Int(42)));
+    }
+
+    #[test]
+    fn inner_scope_shadows_outer() {
+        let mut env = Env::new();
+        env.define("x", Value::Int(1));
+        env.push_scope();
+        env.define("x", Value::Int(2));
+        let val = env.lookup("x").unwrap();
+        assert!(matches!(val, Value::Int(2)));
+    }
+
+    #[test]
+    fn pop_scope_restores_outer() {
+        let mut env = Env::new();
+        env.define("x", Value::Int(1));
+        env.push_scope();
+        env.define("x", Value::Int(2));
+        env.pop_scope();
+        let val = env.lookup("x").unwrap();
+        assert!(matches!(val, Value::Int(1)));
+    }
+
+    #[test]
+    fn undefined_returns_none() {
+        let env = Env::new();
+        assert!(env.lookup("x").is_none());
+    }
+
+    #[test]
+    fn multiple_bindings_same_scope() {
+        let mut env = Env::new();
+        env.define("a", Value::Int(1));
+        env.define("b", Value::Float(2.0));
+        env.define("c", Value::Bool(true));
+        assert!(matches!(env.lookup("a"), Some(Value::Int(1))));
+        assert!(matches!(env.lookup("b"), Some(Value::Float(f)) if (*f - 2.0).abs() < f64::EPSILON));
+        assert!(matches!(env.lookup("c"), Some(Value::Bool(true))));
+    }
+
+    #[test]
+    fn inner_scope_sees_outer() {
+        let mut env = Env::new();
+        env.define("x", Value::Int(42));
+        env.push_scope();
+        let val = env.lookup("x").unwrap();
+        assert!(matches!(val, Value::Int(42)));
+    }
+
+    #[test]
+    fn rebind_in_same_scope_overwrites() {
+        let mut env = Env::new();
+        env.define("x", Value::Int(1));
+        env.define("x", Value::Int(2));
+        assert!(matches!(env.lookup("x"), Some(Value::Int(2))));
+    }
+
+    #[test]
+    #[should_panic(expected = "cannot pop the global scope")]
+    fn pop_global_scope_panics() {
+        let mut env = Env::new();
+        env.pop_scope();
+    }
+}
