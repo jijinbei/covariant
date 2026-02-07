@@ -420,10 +420,14 @@ fn register_utility(env: &mut Env) {
     register(
         env,
         "trace",
-        Arc::new(|args: &[Value], _ctx: &mut EvalCtx<'_>| {
+        Arc::new(|args: &[Value], ctx: &mut EvalCtx<'_>| {
             check_arity("trace", args, 2)?;
             let label = expect_string(&args[0], "label")?;
             eprintln!("[trace] {label}: {:?}", args[1]);
+            // In debug mode, set the label for the next geometry-producing step.
+            if ctx.debug_steps.is_some() {
+                ctx.pending_label = Some(label);
+            }
             Ok(args[1].clone())
         }),
     );

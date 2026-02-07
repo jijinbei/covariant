@@ -12,6 +12,9 @@ use crate::error::{EvalError, EvalErrorKind, EvalResult};
 use crate::units::{angle_to_rad, length_to_mm};
 use crate::value::{FnParam, Value};
 
+/// A raw debug step record: (node_id, span, label, solid).
+pub type RawDebugStep = (NodeId, Span, Option<String>, covariant_geom::Solid);
+
 /// Evaluation context holding references to the DAG, environment, and geometry kernel.
 pub struct EvalCtx<'a> {
     pub dag: &'a Dag,
@@ -19,6 +22,10 @@ pub struct EvalCtx<'a> {
     pub kernel: &'a dyn GeomKernel,
     /// Registered data type definitions: type_name → field names.
     data_types: std::collections::HashMap<String, Vec<String>>,
+    /// When `Some`, collects geometry-producing steps for debug visualization.
+    pub debug_steps: Option<Vec<RawDebugStep>>,
+    /// Label set by `trace()` for the next geometry-producing step.
+    pub pending_label: Option<String>,
 }
 
 /// Evaluate an IR DAG, returning the value of the last root node.
@@ -36,6 +43,30 @@ pub fn eval(dag: &Dag, kernel: &dyn GeomKernel) -> EvalResult<Value> {
     Ok(last)
 }
 
+/// Evaluate an IR DAG with debug step collection enabled.
+///
+/// Returns the final value and a vector of raw debug steps
+/// `(node_id, span, label, solid)` for each geometry-producing call.
+pub fn eval_debug(
+    dag: &Dag,
+    kernel: &dyn GeomKernel,
+) -> EvalResult<(Value, Vec<RawDebugStep>)> {
+    let mut env = Env::new();
+    register_builtins(&mut env);
+
+    let mut ctx = EvalCtx::new(dag, env, kernel);
+    ctx.debug_steps = Some(Vec::new());
+
+    let roots = dag.roots();
+    let mut last = Value::Unit;
+    for &root in roots {
+        last = ctx.eval_node(root)?;
+    }
+
+    let steps = ctx.debug_steps.take().unwrap_or_default();
+    Ok((last, steps))
+}
+
 impl<'a> EvalCtx<'a> {
     /// Create a new evaluation context (for testing and builtins).
     pub fn new(dag: &'a Dag, env: Env, kernel: &'a dyn GeomKernel) -> Self {
@@ -44,6 +75,8 @@ impl<'a> EvalCtx<'a> {
             env,
             kernel,
             data_types: std::collections::HashMap::new(),
+            debug_steps: None,
+            pending_label: None,
         }
     }
 
@@ -90,7 +123,12 @@ impl<'a> EvalCtx<'a> {
             // ── Function call ────────────────────────────────────────
             IrNode::FnCall { func, args } => {
                 let func_val = self.eval_node(func)?;
-                self.eval_call(func_val, &args, span)
+                let result = self.eval_call(func_val, &args, span)?;
+                // Record geometry-producing steps for debug visualization.
+                if let (Some(steps), Value::Solid(s)) = (&mut self.debug_steps, &result) {
+                    steps.push((id, span, self.pending_label.take(), s.clone()));
+                }
+                Ok(result)
             }
 
             // ── Field access ─────────────────────────────────────────

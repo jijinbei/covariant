@@ -13,6 +13,6 @@ pub mod value;
 
 pub use env::Env;
 pub use error::{EvalError, EvalErrorKind, EvalResult};
-pub use eval::eval;
+pub use eval::{eval, eval_debug, RawDebugStep};
 pub use types::Ty;
 pub use value::Value;
