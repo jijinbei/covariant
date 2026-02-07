@@ -10,7 +10,9 @@ pub type Point3 = truck_modeling::Point3;
 pub type Vector3 = truck_modeling::Vector3;
 
 /// Default tolerance for boolean operations and tessellation.
-pub const DEFAULT_TOLERANCE: f64 = 1e-7;
+///
+/// truck_shapeops requires tolerance >= 1e-6. A small but safe default.
+pub const DEFAULT_TOLERANCE: f64 = 0.05;
 
 // ── Truck concrete type aliases (crate-internal) ────────────────────────
 
@@ -108,7 +110,7 @@ mod tests {
 
     #[test]
     fn default_tolerance_value() {
-        assert!((DEFAULT_TOLERANCE - 1e-7).abs() < f64::EPSILON);
+        assert!((DEFAULT_TOLERANCE - 0.05).abs() < f64::EPSILON);
     }
 
     #[test]

@@ -1,7 +1,8 @@
 //! `TruckKernel` — the truck-backed implementation of `GeomKernel`.
 
 use crate::kernel::GeomKernel;
-use crate::{Face, GeomResult, Mesh, Point3, Solid, Vector3};
+use crate::{Face, GeomError, GeomErrorKind, GeomResult, Mesh, Point3, Solid, Vector3,
+            DEFAULT_TOLERANCE};
 use std::path::Path;
 
 /// Stateless geometry kernel backed by the **truck** B-rep library.
@@ -21,16 +22,22 @@ impl GeomKernel for TruckKernel {
         Solid::from_truck(crate::primitives::make_sphere(radius))
     }
 
-    fn union(&self, _a: &Solid, _b: &Solid) -> GeomResult<Solid> {
-        todo!("TruckKernel::union")
+    fn union(&self, a: &Solid, b: &Solid) -> GeomResult<Solid> {
+        crate::boolean::solid_union(a.inner(), b.inner(), DEFAULT_TOLERANCE)
+            .map(Solid::from_truck)
+            .ok_or_else(|| GeomError::new(GeomErrorKind::BooleanFailed, "union failed"))
     }
 
-    fn difference(&self, _a: &Solid, _b: &Solid) -> GeomResult<Solid> {
-        todo!("TruckKernel::difference")
+    fn difference(&self, a: &Solid, b: &Solid) -> GeomResult<Solid> {
+        crate::boolean::solid_difference(a.inner(), b.inner(), DEFAULT_TOLERANCE)
+            .map(Solid::from_truck)
+            .ok_or_else(|| GeomError::new(GeomErrorKind::BooleanFailed, "difference failed"))
     }
 
-    fn intersection(&self, _a: &Solid, _b: &Solid) -> GeomResult<Solid> {
-        todo!("TruckKernel::intersection")
+    fn intersection(&self, a: &Solid, b: &Solid) -> GeomResult<Solid> {
+        crate::boolean::solid_intersection(a.inner(), b.inner(), DEFAULT_TOLERANCE)
+            .map(Solid::from_truck)
+            .ok_or_else(|| GeomError::new(GeomErrorKind::BooleanFailed, "intersection failed"))
     }
 
     fn translate(&self, _solid: &Solid, _v: Vector3) -> Solid {

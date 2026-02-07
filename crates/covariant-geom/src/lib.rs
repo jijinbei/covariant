@@ -3,6 +3,7 @@
 //! Provides primitives, boolean operations, transformations, sweep/revolve,
 //! tessellation, and STL export via the **truck** B-rep kernel.
 
+pub mod boolean;
 pub mod error;
 pub mod kernel;
 pub mod primitives;
