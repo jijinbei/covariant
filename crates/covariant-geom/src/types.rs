@@ -122,6 +122,26 @@ impl Mesh {
     pub fn is_empty(&self) -> bool {
         self.0.positions().is_empty()
     }
+
+    /// Extract vertex positions as plain `[f64; 3]` arrays.
+    pub fn positions(&self) -> Vec<[f64; 3]> {
+        self.0
+            .positions()
+            .iter()
+            .map(|p| [p.x, p.y, p.z])
+            .collect()
+    }
+
+    /// Extract triangle face indices as `[usize; 3]` arrays.
+    ///
+    /// Each element is an index into the array returned by [`positions()`](Self::positions).
+    pub fn tri_faces(&self) -> Vec<[usize; 3]> {
+        self.0
+            .tri_faces()
+            .iter()
+            .map(|tri| [tri[0].pos, tri[1].pos, tri[2].pos])
+            .collect()
+    }
 }
 
 #[cfg(test)]
@@ -165,5 +185,33 @@ mod tests {
         assert_eq!(mesh.position_count(), 0);
         assert_eq!(mesh.triangle_count(), 0);
         assert!(mesh.is_empty());
+    }
+
+    #[test]
+    fn positions_returns_correct_count() {
+        let solid = crate::primitives::make_box(10.0, 10.0, 10.0);
+        let poly = crate::tessellate::mesh_solid(&solid, 0.1);
+        let mesh = Mesh::from_polygon(poly);
+        let pos = mesh.positions();
+        assert_eq!(pos.len(), mesh.position_count());
+        // Each position is [f64; 3]
+        for p in &pos {
+            assert_eq!(p.len(), 3);
+        }
+    }
+
+    #[test]
+    fn tri_faces_indices_in_range() {
+        let solid = crate::primitives::make_box(10.0, 10.0, 10.0);
+        let poly = crate::tessellate::mesh_solid(&solid, 0.1);
+        let mesh = Mesh::from_polygon(poly);
+        let pos = mesh.positions();
+        let faces = mesh.tri_faces();
+        assert_eq!(faces.len(), mesh.triangle_count());
+        for tri in &faces {
+            assert!(tri[0] < pos.len());
+            assert!(tri[1] < pos.len());
+            assert!(tri[2] < pos.len());
+        }
     }
 }

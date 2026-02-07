@@ -276,6 +276,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "covariant-debug"
+version = "0.1.0"
+dependencies = [
+ "covariant-eval",
+ "covariant-geom",
+ "covariant-ir",
+ "covariant-syntax",
+]
+
+[[package]]
 name = "covariant-eval"
 version = "0.1.0"
 dependencies = [
