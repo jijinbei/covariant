@@ -65,18 +65,17 @@ impl GeomKernel for TruckKernel {
         ))
     }
 
-    fn sweep(&self, _profile: &Face, _direction: Vector3) -> Solid {
-        todo!("TruckKernel::sweep")
+    fn sweep(&self, profile: &Face, direction: Vector3) -> Solid {
+        Solid::from_truck(crate::sweep::solid_sweep(profile.inner(), direction))
     }
 
-    fn revolve(
-        &self,
-        _profile: &Face,
-        _origin: Point3,
-        _axis: Vector3,
-        _angle_rad: f64,
-    ) -> Solid {
-        todo!("TruckKernel::revolve")
+    fn revolve(&self, profile: &Face, origin: Point3, axis: Vector3, angle_rad: f64) -> Solid {
+        Solid::from_truck(crate::sweep::solid_revolve(
+            profile.inner(),
+            origin,
+            axis,
+            angle_rad,
+        ))
     }
 
     fn tessellate(&self, _solid: &Solid, _tolerance: f64) -> Mesh {
