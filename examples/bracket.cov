@@ -1,0 +1,19 @@
+// L-shaped bracket with mounting holes
+
+// Start with full bounding box, cut away the empty space to form L-shape
+let block = box(vec3(60mm, 40mm, 35mm))
+let cutout = move(box(vec3(56mm, 42mm, 31mm)), vec3(5mm, -1mm, 5mm))
+let bracket = difference(block, cutout)
+
+let hole = cylinder(2.5mm, 7mm)
+
+let holes = union_many([
+  move(hole, vec3(15mm, 10mm, -1mm)),
+  move(hole, vec3(15mm, 30mm, -1mm)),
+  move(hole, vec3(45mm, 10mm, -1mm)),
+  move(hole, vec3(45mm, 30mm, -1mm))
+])
+
+let model = difference(bracket, holes)
+
+export_stl("bracket.stl", model)
