@@ -8,6 +8,7 @@ pub mod error;
 pub mod kernel;
 pub mod primitives;
 pub mod sweep;
+pub mod tessellate;
 pub mod transform;
 pub mod truck_kernel;
 pub mod types;

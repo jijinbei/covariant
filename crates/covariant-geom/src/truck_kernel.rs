@@ -78,11 +78,11 @@ impl GeomKernel for TruckKernel {
         ))
     }
 
-    fn tessellate(&self, _solid: &Solid, _tolerance: f64) -> Mesh {
-        todo!("TruckKernel::tessellate")
+    fn tessellate(&self, solid: &Solid, tolerance: f64) -> Mesh {
+        Mesh::from_polygon(crate::tessellate::mesh_solid(solid.inner(), tolerance))
     }
 
-    fn export_stl(&self, _mesh: &Mesh, _path: &Path) -> GeomResult<()> {
-        todo!("TruckKernel::export_stl")
+    fn export_stl(&self, mesh: &Mesh, path: &Path) -> GeomResult<()> {
+        crate::tessellate::write_stl(mesh.inner(), path)
     }
 }
