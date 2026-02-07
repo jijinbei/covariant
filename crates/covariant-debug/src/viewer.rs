@@ -20,8 +20,44 @@ const VIEW_TOLERANCE: f64 = 0.05;
 
 /// Color for the currently active step (blue).
 const ACTIVE_COLOR: (f32, f32, f32) = (0.3, 0.5, 1.0);
-/// Color for previously completed steps (gray).
-const PASSIVE_COLOR: (f32, f32, f32) = (0.6, 0.6, 0.6);
+
+/// Compute smooth per-vertex normals by averaging the normals of adjacent faces.
+fn compute_smooth_normals(
+    coords: &[Point3<f32>],
+    indices: &[Point3<u16>],
+) -> Vec<Vector3<f32>> {
+    let mut normals = vec![Vector3::new(0.0f32, 0.0, 0.0); coords.len()];
+
+    for face in indices {
+        let i0 = face.x as usize;
+        let i1 = face.y as usize;
+        let i2 = face.z as usize;
+
+        let v0 = &coords[i0];
+        let v1 = &coords[i1];
+        let v2 = &coords[i2];
+
+        let edge1 = Vector3::new(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
+        let edge2 = Vector3::new(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
+        let face_normal = edge1.cross(&edge2);
+
+        normals[i0] += face_normal;
+        normals[i1] += face_normal;
+        normals[i2] += face_normal;
+    }
+
+    normals
+        .into_iter()
+        .map(|n| {
+            let len = n.norm();
+            if len > 1e-10 {
+                n / len
+            } else {
+                Vector3::new(0.0, 1.0, 0.0)
+            }
+        })
+        .collect()
+}
 
 /// Convert a covariant-geom `Solid` to a kiss3d-compatible `Mesh`.
 ///
@@ -57,7 +93,10 @@ fn solid_to_kiss3d_mesh(
         .map(|f| Point3::new(f[0] as u16, f[1] as u16, f[2] as u16))
         .collect();
 
-    let kiss_mesh = KissMesh::new(coords, indices, None, None, false);
+    // Compute smooth per-vertex normals by averaging adjacent face normals.
+    let normals = compute_smooth_normals(&coords, &indices);
+
+    let kiss_mesh = KissMesh::new(coords, indices, Some(normals), None, false);
     Some(Rc::new(RefCell::new(kiss_mesh)))
 }
 
@@ -130,7 +169,7 @@ pub fn launch_viewer(session: &DebugSession, kernel: &dyn GeomKernel) {
     let mut current_step: usize = 0;
     let total = session.step_count();
 
-    // Add all mesh scene nodes (initially hidden except step 0).
+    // Add all mesh scene nodes (initially only step 0 visible).
     let mut scene_nodes: Vec<Option<SceneNode>> = Vec::with_capacity(total);
     for (i, mesh_opt) in meshes.iter().enumerate() {
         match mesh_opt {
@@ -143,10 +182,8 @@ pub fn launch_viewer(session: &DebugSession, kernel: &dyn GeomKernel) {
                     node.set_color(ACTIVE_COLOR.0, ACTIVE_COLOR.1, ACTIVE_COLOR.2);
                     node.set_visible(true);
                 } else {
-                    node.set_color(PASSIVE_COLOR.0, PASSIVE_COLOR.1, PASSIVE_COLOR.2);
                     node.set_visible(false);
                 }
-                node.enable_backface_culling(false);
                 scene_nodes.push(Some(node));
             }
             None => {
@@ -201,17 +238,12 @@ pub fn launch_viewer(session: &DebugSession, kernel: &dyn GeomKernel) {
         }
 
         if step_changed {
-            // Update visibility: show steps 0..=current_step.
-            // Current step in active color, others in passive.
+            // Update visibility: show only the current step.
             for (i, node_opt) in scene_nodes.iter_mut().enumerate() {
                 if let Some(node) = node_opt {
-                    if i <= current_step {
+                    if i == current_step {
                         node.set_visible(true);
-                        if i == current_step {
-                            node.set_color(ACTIVE_COLOR.0, ACTIVE_COLOR.1, ACTIVE_COLOR.2);
-                        } else {
-                            node.set_color(PASSIVE_COLOR.0, PASSIVE_COLOR.1, PASSIVE_COLOR.2);
-                        }
+                        node.set_color(ACTIVE_COLOR.0, ACTIVE_COLOR.1, ACTIVE_COLOR.2);
                     } else {
                         node.set_visible(false);
                     }
