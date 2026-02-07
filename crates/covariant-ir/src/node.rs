@@ -5,6 +5,13 @@ use covariant_syntax::{Span, Spanned};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct NodeId(pub(crate) u32);
 
+impl NodeId {
+    /// Create a `NodeId` from a raw index (for test/debug use in other crates).
+    pub fn from_raw(raw: u32) -> Self {
+        Self(raw)
+    }
+}
+
 impl std::fmt::Display for NodeId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "n{}", self.0)

@@ -1,0 +1,12 @@
+[package]
+name = "covariant-debug"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Debug visualization and step-through for the COVARIANT language"
+
+[dependencies]
+covariant-syntax = { path = "../covariant-syntax" }
+covariant-ir = { path = "../covariant-ir" }
+covariant-eval = { path = "../covariant-eval" }
+covariant-geom = { path = "../covariant-geom" }
