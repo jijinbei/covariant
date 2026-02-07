@@ -7,6 +7,7 @@ pub mod boolean;
 pub mod error;
 pub mod kernel;
 pub mod primitives;
+pub mod transform;
 pub mod truck_kernel;
 pub mod types;
 

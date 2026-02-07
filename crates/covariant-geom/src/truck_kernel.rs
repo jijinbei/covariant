@@ -40,26 +40,29 @@ impl GeomKernel for TruckKernel {
             .ok_or_else(|| GeomError::new(GeomErrorKind::BooleanFailed, "intersection failed"))
     }
 
-    fn translate(&self, _solid: &Solid, _v: Vector3) -> Solid {
-        todo!("TruckKernel::translate")
+    fn translate(&self, solid: &Solid, v: Vector3) -> Solid {
+        Solid::from_truck(crate::transform::solid_translate(solid.inner(), v))
     }
 
-    fn rotate(
-        &self,
-        _solid: &Solid,
-        _origin: Point3,
-        _axis: Vector3,
-        _angle_rad: f64,
-    ) -> Solid {
-        todo!("TruckKernel::rotate")
+    fn rotate(&self, solid: &Solid, origin: Point3, axis: Vector3, angle_rad: f64) -> Solid {
+        Solid::from_truck(crate::transform::solid_rotate(
+            solid.inner(),
+            origin,
+            axis,
+            angle_rad,
+        ))
     }
 
-    fn scale(&self, _solid: &Solid, _center: Point3, _factor: f64) -> Solid {
-        todo!("TruckKernel::scale")
+    fn scale(&self, solid: &Solid, center: Point3, factor: f64) -> Solid {
+        Solid::from_truck(crate::transform::solid_scale(solid.inner(), center, factor))
     }
 
-    fn mirror(&self, _solid: &Solid, _origin: Point3, _normal: Vector3) -> Solid {
-        todo!("TruckKernel::mirror")
+    fn mirror(&self, solid: &Solid, origin: Point3, normal: Vector3) -> Solid {
+        Solid::from_truck(crate::transform::solid_mirror(
+            solid.inner(),
+            origin,
+            normal,
+        ))
     }
 
     fn sweep(&self, _profile: &Face, _direction: Vector3) -> Solid {
