@@ -286,6 +286,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "covariant-export"
+version = "0.1.0"
+dependencies = [
+ "covariant-geom",
+ "covariant-thread",
+]
+
+[[package]]
 name = "covariant-geom"
 version = "0.1.0"
 dependencies = [
