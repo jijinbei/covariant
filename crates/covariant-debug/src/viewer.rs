@@ -100,6 +100,53 @@ fn solid_to_kiss3d_mesh(
     Some(Rc::new(RefCell::new(kiss_mesh)))
 }
 
+/// Axis length in mm.
+const AXIS_LENGTH: f32 = 100.0;
+/// Grid extent: half-size of the grid in mm (grid spans -GRID_EXTENT..+GRID_EXTENT).
+const GRID_EXTENT: f32 = 100.0;
+/// Grid spacing in mm.
+const GRID_SPACING: f32 = 10.0;
+
+/// Draw XYZ coordinate axes through the origin (X=red, Y=green, Z=blue).
+fn draw_axes(window: &mut Window) {
+    let o = Point3::origin();
+    let red = Point3::new(1.0, 0.2, 0.2);
+    let green = Point3::new(0.2, 1.0, 0.2);
+    let blue = Point3::new(0.3, 0.3, 1.0);
+
+    window.set_line_width(3.0);
+    window.draw_line(&o, &Point3::new(AXIS_LENGTH, 0.0, 0.0), &red);
+    window.draw_line(&o, &Point3::new(0.0, AXIS_LENGTH, 0.0), &green);
+    window.draw_line(&o, &Point3::new(0.0, 0.0, AXIS_LENGTH), &blue);
+    window.set_line_width(1.0);
+}
+
+/// Draw a grid on the XY plane (Z=0) to help visualize scale and position.
+fn draw_grid(window: &mut Window) {
+    let color = Point3::new(0.3, 0.3, 0.3);
+    let n = (GRID_EXTENT / GRID_SPACING) as i32;
+
+    // Lines parallel to Y-axis
+    (-n..=n).for_each(|i| {
+        let x = i as f32 * GRID_SPACING;
+        window.draw_line(
+            &Point3::new(x, -GRID_EXTENT, 0.0),
+            &Point3::new(x, GRID_EXTENT, 0.0),
+            &color,
+        );
+    });
+
+    // Lines parallel to X-axis
+    (-n..=n).for_each(|i| {
+        let y = i as f32 * GRID_SPACING;
+        window.draw_line(
+            &Point3::new(-GRID_EXTENT, y, 0.0),
+            &Point3::new(GRID_EXTENT, y, 0.0),
+            &color,
+        );
+    });
+}
+
 /// Convert a byte offset to (line, col) for display.
 fn offset_to_line_col(source: &str, offset: u32) -> (usize, usize) {
     let offset = offset as usize;
@@ -198,6 +245,9 @@ pub fn launch_viewer(session: &DebugSession, kernel: &dyn GeomKernel) {
     window.set_title(&info);
 
     while window.render_with_camera(&mut camera) {
+        draw_axes(&mut window);
+        draw_grid(&mut window);
+
         let mut step_changed = false;
 
         for mut event in window.events().iter() {
