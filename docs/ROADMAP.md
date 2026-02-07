@@ -120,35 +120,37 @@
 
 ---
 
-## Phase 3: IR Crate
+## Phase 3: IR Crate ✅
 
 **Goal**: Intermediate representation and DAG
 **Duration**: 1 week
 
 ### 3.1 IR Definition
-- [ ] Create `crates/covariant-ir`
-- [ ] Define IR node types (`node.rs`)
-- [ ] Define DAG structure (`dag.rs`)
-- [ ] Node ID management
-- [ ] Span preservation
+- [x] Create `crates/covariant-ir`
+- [x] Define IR node types (`node.rs`) — 20 IrNode variants, 5 supporting types
+- [x] Define DAG structure (`dag.rs`) — arena-allocated with insert/get/iter
+- [x] Node ID management — `NodeId(u32)` newtype
+- [x] Span preservation
 
 ### 3.2 AST → IR Lowering
-- [ ] Implement lowering (`lower.rs`)
-- [ ] Preserve type information
-- [ ] Preserve source spans
-- [ ] Error handling
+- [x] Implement lowering (`lower.rs`)
+- [x] Pipe desugaring (`|>` → `FnCall` with prepended arg)
+- [x] Grouped elimination (parentheses unwrapped)
+- [x] Preserve type annotations
+- [x] Preserve source spans
+- [x] Error handling
 
 ### 3.3 Incremental Compilation
-- [ ] Node hashing (`hash.rs`)
-- [ ] Cache system (`cache.rs`)
-- [ ] DAG diffing (`diff.rs`)
-- [ ] Cache invalidation
+- [ ] Node hashing (`hash.rs`) — deferred to Phase 5 with `comemo`
+- [ ] Cache system (`cache.rs`) — deferred to Phase 5
+- [ ] DAG diffing (`diff.rs`) — deferred to Phase 5
+- [ ] Cache invalidation — deferred to Phase 5
 
 **Deliverables**:
-- Complete IR definition
-- AST → IR lowering
-- Incremental compilation foundation
-- Unit tests
+- ✅ Complete IR definition (20 node variants, thin IR mirroring AST)
+- ✅ AST → IR lowering with pipe desugaring and grouped elimination
+- ✅ 45 unit tests + 8 integration tests passing
+- ⏳ Incremental compilation deferred to Phase 5
 
 ---
 
@@ -468,5 +470,5 @@
 ---
 
 **Last Updated**: 2026-02-07
-**Status**: Phase 0 + Phase 1 + Phase 2 complete, ready to begin Phase 3
-**Next Action**: Create `covariant-ir` crate and begin IR definition
+**Status**: Phase 0 + Phase 1 + Phase 2 + Phase 3 complete, ready to begin Phase 4
+**Next Action**: Create `covariant-geom` crate and evaluate geometry kernel
