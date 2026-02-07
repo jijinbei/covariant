@@ -1,0 +1,10 @@
+[package]
+name = "covariant-export"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Export pipeline for COVARIANT (STL, quality control, thread resolution)"
+
+[dependencies]
+covariant-geom = { path = "../covariant-geom" }
+covariant-thread = { path = "../covariant-thread" }

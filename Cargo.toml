@@ -2,6 +2,7 @@
 members = [
     "crates/covariant-cli",
     "crates/covariant-eval",
+    "crates/covariant-export",
     "crates/covariant-geom",
     "crates/covariant-ir",
     "crates/covariant-syntax",
