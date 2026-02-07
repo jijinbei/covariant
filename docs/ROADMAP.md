@@ -258,36 +258,42 @@
 
 ---
 
-## Phase 6: Export Crate
+## Phase 6: Export Crate ✅
 
-**Goal**: STL export
+**Goal**: STL export with quality control
 **Duration**: 3-4 days
 
-### 6.1 Tessellation
-- [ ] Create `crates/covariant-export`
-- [ ] Define tessellation parameters
-- [ ] Implement preview quality settings
-- [ ] Implement export quality settings
-- [ ] Quality control API
+### 6.1 Quality Control
+- [x] Create `crates/covariant-export`
+- [x] Define Quality presets (Draft/Standard/Fine/Custom)
+- [x] Define ExportOptions (quality, format, thread_mode)
+- [x] StlFormat enum (Binary/Ascii)
 
 ### 6.2 STL Output
-- [ ] Implement binary STL writer (`stl.rs`)
-- [ ] Implement ASCII STL writer
-- [ ] Normal calculation
-- [ ] Mesh validation
-- [ ] Mesh optimization (optional)
+- [x] Binary STL export (via covariant-geom)
+- [x] ASCII STL export (added to GeomKernel trait)
+- [x] Mesh validation (empty mesh detection, position/triangle counts)
+- [ ] Mesh optimization (deferred to v0.2+)
 
-### 6.3 Thread Hole Expansion
-- [ ] No-thread mode
-- [ ] Cosmetic mode
-- [ ] Full thread mode
-- [ ] Tests for each mode
+### 6.3 Thread Mode Resolution
+- [x] None mode (pass-through)
+- [x] Cosmetic mode (falls back to None with warning)
+- [x] Full thread mode (falls back to None with warning — helical sweep deferred)
+- [x] Tests for all three modes
+
+### 6.4 Mesh Accessors
+- [x] Mesh::position_count(), triangle_count(), is_empty(), empty()
+- [x] export_stl_ascii() added to GeomKernel trait
+
+### 6.5 Eval Integration
+- [x] eval's export_stl builtin delegates to covariant-export
 
 **Deliverables**:
-- STL export (binary and ASCII)
-- Quality control system
-- Thread rendering modes
-- Valid STL output verified with external tools
+- ✅ STL export (binary and ASCII) with quality control
+- ✅ Quality presets (Draft 0.2mm, Standard 0.05mm, Fine 0.01mm, Custom)
+- ✅ Thread mode resolution with fallback warnings
+- ✅ Mesh validation (MeshReport, MeshWarning)
+- ✅ 9 unit tests + 4 integration tests passing
 
 ---
 
@@ -473,5 +479,5 @@
 ---
 
 **Last Updated**: 2026-02-07
-**Status**: Phases 0–5, 8 complete (core pipeline + CLI working)
-**Next Action**: Phase 6 (export quality control) or Phase 7 (debug visualization)
+**Status**: Phases 0–6, 8 complete (core pipeline + CLI + export working)
+**Next Action**: Phase 7 (debug visualization)
