@@ -95,6 +95,11 @@ impl Edge {
 pub struct Mesh(pub(crate) PolygonMesh);
 
 impl Mesh {
+    /// Create an empty mesh with no geometry.
+    pub fn empty() -> Self {
+        Self(PolygonMesh::default())
+    }
+
     pub(crate) fn from_polygon(inner: PolygonMesh) -> Self {
         Self(inner)
     }
@@ -156,7 +161,7 @@ mod tests {
 
     #[test]
     fn empty_mesh_is_empty() {
-        let mesh = Mesh::from_polygon(PolygonMesh::default());
+        let mesh = Mesh::empty();
         assert_eq!(mesh.position_count(), 0);
         assert_eq!(mesh.triangle_count(), 0);
         assert!(mesh.is_empty());
