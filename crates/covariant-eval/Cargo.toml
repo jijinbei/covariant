@@ -1,0 +1,12 @@
+[package]
+name = "covariant-eval"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Evaluator for the COVARIANT language"
+
+[dependencies]
+covariant-syntax = { path = "../covariant-syntax" }
+covariant-ir = { path = "../covariant-ir" }
+covariant-geom = { path = "../covariant-geom" }
+covariant-thread = { path = "../covariant-thread" }
