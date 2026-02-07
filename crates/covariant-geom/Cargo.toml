@@ -1,0 +1,13 @@
+[package]
+name = "covariant-geom"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Geometry kernel abstraction for COVARIANT"
+
+[dependencies]
+covariant-thread = { path = "../covariant-thread" }
+truck-modeling = "0.6"
+truck-shapeops = "0.4"
+truck-meshalgo = "0.4"
+truck-polymesh = "0.6"

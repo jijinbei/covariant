@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/covariant-cli",
+    "crates/covariant-geom",
     "crates/covariant-ir",
     "crates/covariant-syntax",
     "crates/covariant-thread",
