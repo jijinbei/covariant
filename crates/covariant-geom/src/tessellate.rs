@@ -33,6 +33,25 @@ pub fn write_stl(mesh: &PolygonMesh, path: &Path) -> GeomResult<()> {
         })
 }
 
+/// Write a polygon mesh to an STL file (ASCII format).
+pub fn write_stl_ascii(mesh: &PolygonMesh, path: &Path) -> GeomResult<()> {
+    let file = std::fs::File::create(path).map_err(|e| {
+        GeomError::new(
+            GeomErrorKind::IoError,
+            format!("failed to create STL file: {e}"),
+        )
+    })?;
+    let mut writer = BufWriter::new(file);
+    truck_polymesh::stl::write(mesh, &mut writer, truck_polymesh::stl::StlType::Ascii).map_err(
+        |e| {
+            GeomError::new(
+                GeomErrorKind::IoError,
+                format!("failed to write ASCII STL: {e}"),
+            )
+        },
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -55,6 +74,21 @@ mod tests {
         write_stl(&mesh, &path).expect("STL export should succeed");
         let meta = std::fs::metadata(&path).expect("STL file should exist");
         assert!(meta.len() > 0, "STL file should be non-empty");
+        std::fs::remove_file(&path).ok();
+    }
+
+    #[test]
+    fn export_stl_ascii_starts_with_solid() {
+        let solid = make_box(5.0, 5.0, 5.0);
+        let mesh = mesh_solid(&solid, 0.1);
+        let dir = std::env::temp_dir();
+        let path = dir.join("covariant_test_box_ascii.stl");
+        write_stl_ascii(&mesh, &path).expect("ASCII STL export should succeed");
+        let content = std::fs::read_to_string(&path).expect("should read ASCII STL");
+        assert!(
+            content.starts_with("solid"),
+            "ASCII STL should start with 'solid'"
+        );
         std::fs::remove_file(&path).ok();
     }
 }

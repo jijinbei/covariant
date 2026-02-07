@@ -78,6 +78,9 @@ pub trait GeomKernel {
     /// Tessellate a solid into a triangle mesh.
     fn tessellate(&self, solid: &Solid, tolerance: f64) -> Mesh;
 
-    /// Export a mesh to an STL file.
+    /// Export a mesh to an STL file (binary format).
     fn export_stl(&self, mesh: &Mesh, path: &Path) -> GeomResult<()>;
+
+    /// Export a mesh to an STL file (ASCII format).
+    fn export_stl_ascii(&self, mesh: &Mesh, path: &Path) -> GeomResult<()>;
 }

@@ -85,4 +85,8 @@ impl GeomKernel for TruckKernel {
     fn export_stl(&self, mesh: &Mesh, path: &Path) -> GeomResult<()> {
         crate::tessellate::write_stl(mesh.inner(), path)
     }
+
+    fn export_stl_ascii(&self, mesh: &Mesh, path: &Path) -> GeomResult<()> {
+        crate::tessellate::write_stl_ascii(mesh.inner(), path)
+    }
 }

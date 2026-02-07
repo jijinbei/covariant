@@ -102,6 +102,21 @@ impl Mesh {
     pub(crate) fn inner(&self) -> &PolygonMesh {
         &self.0
     }
+
+    /// Number of vertex positions in the mesh.
+    pub fn position_count(&self) -> usize {
+        self.0.positions().len()
+    }
+
+    /// Number of triangles in the mesh.
+    pub fn triangle_count(&self) -> usize {
+        self.0.tri_faces().len()
+    }
+
+    /// Returns `true` if the mesh contains no geometry.
+    pub fn is_empty(&self) -> bool {
+        self.0.positions().is_empty()
+    }
 }
 
 #[cfg(test)]
@@ -127,5 +142,23 @@ mod tests {
         assert_eq!(v.x, 4.0);
         assert_eq!(v.y, 5.0);
         assert_eq!(v.z, 6.0);
+    }
+
+    #[test]
+    fn mesh_accessors_on_tessellated_box() {
+        let solid = crate::primitives::make_box(10.0, 10.0, 10.0);
+        let poly = crate::tessellate::mesh_solid(&solid, 0.1);
+        let mesh = Mesh::from_polygon(poly);
+        assert!(mesh.position_count() > 0);
+        assert!(mesh.triangle_count() > 0);
+        assert!(!mesh.is_empty());
+    }
+
+    #[test]
+    fn empty_mesh_is_empty() {
+        let mesh = Mesh::from_polygon(PolygonMesh::default());
+        assert_eq!(mesh.position_count(), 0);
+        assert_eq!(mesh.triangle_count(), 0);
+        assert!(mesh.is_empty());
     }
 }
