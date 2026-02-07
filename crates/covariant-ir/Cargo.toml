@@ -1,0 +1,8 @@
+[package]
+name = "covariant-ir"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+covariant-syntax = { path = "../covariant-syntax" }
