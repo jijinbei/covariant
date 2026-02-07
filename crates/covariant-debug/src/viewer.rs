@@ -197,6 +197,12 @@ pub fn launch_viewer(session: &DebugSession, kernel: &dyn GeomKernel) {
         return;
     }
 
+    // Force X11 backend — kiss3d 0.35 (winit 0.24) has broken Wayland support.
+    #[cfg(target_os = "linux")]
+    if std::env::var("WAYLAND_DISPLAY").is_ok() {
+        unsafe { std::env::set_var("WAYLAND_DISPLAY", "") };
+    }
+
     // Pre-tessellate all step solids into kiss3d meshes.
     let meshes: Vec<Option<Rc<RefCell<KissMesh>>>> = session
         .steps
