@@ -403,7 +403,14 @@ fn register_thread_fn(env: &mut Env) {
             })?;
             let hole_d = hole_diameter(&dims, kind);
             let radius = hole_d / 2.0;
-            Ok(Value::Solid(ctx.kernel.cylinder(radius, depth)))
+            // Extend the hole slightly past both ends to avoid co-planar
+            // faces during boolean subtraction (standard CAD practice).
+            let ext = 0.1; // mm
+            let cyl = ctx.kernel.cylinder(radius, depth + 2.0 * ext);
+            let shifted = ctx
+                .kernel
+                .translate(&cyl, covariant_geom::Vector3::new(0.0, 0.0, -ext));
+            Ok(Value::Solid(shifted))
         }),
     );
 }
