@@ -10,6 +10,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "covariant-ir"
+version = "0.1.0"
+dependencies = [
+ "covariant-syntax",
+]
+
+[[package]]
 name = "covariant-syntax"
 version = "0.1.0"
 
